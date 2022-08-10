@@ -18,7 +18,7 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
 
     // Ensure 1 mint per wallet
     mapping(address => bool) public _minted;
-    bool private _mintEnabled = false;
+    bool public mintEnabled = false;
 
     // Keep track of mint amount
     uint8 private _goldCount = 0;
@@ -40,10 +40,10 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
         by the public
 
     */
-    uint8 public goldAvailable = 1;
-    uint8 public platinumAvailable = 1;
-    uint8 public diamondAvailable = 1;
-    uint8 public tripleaAvailable = 1;
+    uint8 public goldAvailable = 3;
+    uint8 public platinumAvailable = 3;
+    uint8 public diamondAvailable = 3;
+    uint8 public tripleaAvailable = 3;
 
     // Pricing for each NFT Tier
     // Prices can be updated in setPrice function
@@ -69,7 +69,7 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
 
     function mint(uint8 tier) public payable onlyOwner
     {
-        require(_mintEnabled, "Minting is NOT enabled!");
+        require(mintEnabled, "Minting is NOT enabled!");
         require(!_minted[msg.sender], "This wallet has already minted!");
         require(tier <= TRIPLEA, "Invalid membership type");
 
@@ -115,15 +115,15 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
         {
             goldPrice = newPrice;
         }
-        if (tier <= PLATINUM)
+        if (tier == PLATINUM)
         {
             platinumPrice = newPrice;
         }
-        if (tier <= DIAMOND)
+        if (tier == DIAMOND)
         {
             diamondPrice = newPrice;
         }
-        if (tier <= TRIPLEA)
+        if (tier == TRIPLEA)
         {
             tripleaPrice = newPrice;
         }
@@ -158,17 +158,17 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
             require(goldAvailable <= goldMax, "Available cannot exceed max supply");
             goldAvailable = newAvailable;
         }
-        if (tier <= PLATINUM)
+        if (tier == PLATINUM)
         {
             require(platinumAvailable <= platinumMax, "Available cannot exceed max supply");
             platinumAvailable = newAvailable;
         }
-        if (tier <= DIAMOND)
+        if (tier == DIAMOND)
         {
             require(diamondAvailable <= diamondMax, "Available cannot exceed max supply");
             diamondAvailable = newAvailable;
         }
-        if (tier <= TRIPLEA)
+        if (tier == TRIPLEA)
         {
             require(tripleaAvailable <= tripleaMax, "Available cannot exceed max supply");
             tripleaAvailable = newAvailable;
@@ -205,11 +205,11 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
     }
 
     function setMintEnabled(bool value) public onlyOwner {
-        _mintEnabled = value;
+        mintEnabled = value;
     }
 
     // Allow burnable externally for future use
-    function burn(uint256 id, uint256 amount) external {
+    function externalBurn(uint256 id, uint256 amount) external {
         _burn(msg.sender, id, amount);
     }
 }
