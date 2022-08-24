@@ -20,11 +20,11 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
     mapping(address => bool) public _minted;
     bool public mintEnabled = false;
 
-    // Keep track of mint amount
-    uint8 private _goldCount = 0;
-    uint8 private _platinumCount = 0;
-    uint8 private _diamondCount = 0;
-    uint8 private _tripleaCount = 0;
+    // Keep track of current supply
+    uint8 public goldSupply = 0;
+    uint8 public platinumSupply = 0;
+    uint8 public diamondSupply = 0;
+    uint8 private tripleaSupply = 0;
 
     // Max supply variables
     uint8 public goldMax = 50;
@@ -67,7 +67,7 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
         _setURI(newuri);
     }
 
-    function mint(uint8 tier) public payable onlyOwner
+    function mint(uint8 tier) public payable
     {
         require(mintEnabled, "Minting is NOT enabled!");
         require(!_minted[msg.sender], "This wallet has already minted!");
@@ -77,33 +77,33 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
 
         if (tier == GOLD)
         {
-            require(_goldCount < goldAvailable, "None available to mint");
+            require(goldSupply < goldAvailable, "None available to mint");
             require(msg.value >= goldPrice, "Transaction value too low");
-            _goldCount++;
+            goldSupply++;
             _mint(msg.sender, 0, 1, "");
             return;
         } 
         if (tier == PLATINUM) 
         {
-            require(_platinumCount < platinumAvailable, "None available to mint");
+            require(platinumSupply < platinumAvailable, "None available to mint");
             require(msg.value >= platinumPrice, "Transaction value too low");
-            _platinumCount++;
-            _mint(msg.sender, 2, 1, "");
+            platinumSupply++;
+            _mint(msg.sender, 1, 1, "");
             return;
         }
         if (tier == DIAMOND)
         {
-            require(_diamondCount < diamondAvailable, "None available to mint");
+            require(diamondSupply < diamondAvailable, "None available to mint");
             require(msg.value >= diamondPrice, "Transaction value too low");
-            _diamondCount++;
-            _mint(msg.sender, 1, 1, "");
+            diamondSupply++;
+            _mint(msg.sender, 2, 1, "");
             return;
         } 
         if (tier == TRIPLEA) 
         {
-            require(_tripleaCount < tripleaAvailable, "None available to mint");
+            require(tripleaSupply < tripleaAvailable, "None available to mint");
             require(msg.value >= tripleaPrice, "Transaction value too low");
-            _tripleaCount++;
+            tripleaSupply++;
             _mint(msg.sender, 3, 1, "");
             return;
         }
@@ -180,26 +180,26 @@ contract PixelTest is ERC1155, Ownable, ERC1155Burnable {
     function safeMint(uint8 tier, address recieveAddress) public onlyOwner {
         if (tier == GOLD)
         {
-            require(_goldCount < goldAvailable, "None available to mint");
-            _goldCount++;
+            require(goldSupply < goldAvailable, "None available to mint");
+            goldSupply++;
             _mint(recieveAddress, 0, 1, "");
         } 
         if (tier == PLATINUM) 
         {
-            require(_platinumCount < platinumAvailable, "None available to mint");
-            _platinumCount++;
-            _mint(recieveAddress, 2, 1, "");
+            require(platinumSupply < platinumAvailable, "None available to mint");
+            platinumSupply++;
+            _mint(recieveAddress, 1, 1, "");
         }
         if (tier == DIAMOND)
         {
-            require(_diamondCount < diamondAvailable, "None available to mint");
-            _diamondCount++;
-            _mint(recieveAddress, 1, 1, "");
+            require(diamondSupply < diamondAvailable, "None available to mint");
+            diamondSupply++;
+            _mint(recieveAddress, 2, 1, "");
         } 
         if (tier == TRIPLEA) 
         {
-            require(_tripleaCount < tripleaAvailable, "None available to mint");
-            _tripleaCount++;
+            require(tripleaSupply < tripleaAvailable, "None available to mint");
+            tripleaSupply++;
             _mint(recieveAddress, 3, 1, "");
         }
     }
