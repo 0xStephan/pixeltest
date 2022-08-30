@@ -1,5 +1,6 @@
 {
   "name": "Gold Boss",
   "description": "Pixel Boss Club is our next-gen digital club space in Armadale, Victoria.\r\n Enjoy the benefits that come with this Gold Boss membership.",
-  "image": "https://github.com/0xStephan/pixeltest/raw/main/gold-card.png"
+  "image": "https://github.com/0xStephan/pixeltest/raw/main/gold-card.png",
+  "animation_url": "https://github.com/0xStephan/pixeltest/raw/main/gold-animation.png"
 }
